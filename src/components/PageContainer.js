@@ -16,4 +16,4 @@ const styles = StyleSheet.create({
         // backgroundColor: 'red'
     }
 })
-export default PageContainer;
+export default PageContainer; 

@@ -30,7 +30,7 @@ const AuthScreen = () => (
                 label="Password"
                 iconPack={Feather}
                 icon="lock"
-                // errorText="This is an error"
+                // errorText="This is an error" 
             />     
             <SubmitButton
                 title="Sign Up"

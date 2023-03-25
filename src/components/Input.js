@@ -4,7 +4,7 @@ import colors from "../constants/colors";
 
 const Input = (props) => {
     return (
-        <View style={styles.container}>
+        <View style={styles.container}> 
             <Text style={styles.label}>{props.label}</Text>
             <View style={styles.inputContainer}>
                 {props.icon && (
@@ -21,7 +21,7 @@ const Input = (props) => {
                     <Text style={styles.textError}>
                         {props.errorText}
                     </Text>
-                </View>
+                </View> 
             )}
         </View>
     );

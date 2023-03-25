@@ -5,4 +5,4 @@ export default {
     grey: "#7f8c8d",
     textColor: "#1c1e21",
     primary: "#32d48e",
-}
+} 

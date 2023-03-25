@@ -18,3 +18,4 @@ const AuthNavigator = () => {
         </Stack.Navigator>
     );
 };
+ 
