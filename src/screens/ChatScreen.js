@@ -34,7 +34,7 @@ const ChatScreen = () => {
             keyboardVerticalOffset={100}
                 style={styles.screen}
             >
-                <ImageBackground
+                <ImageBackground 
                     style={styles.imageContainer}
                     source={backgroundImage}></ImageBackground>
                 <View style={styles.inputContainer}>

@@ -23,7 +23,7 @@ const TabNavigator = () => {
                             name="chatbubble-outline"
                             size={size}
                             color={color}
-                        />
+                        /> 
                     ),
                 }}
             />
