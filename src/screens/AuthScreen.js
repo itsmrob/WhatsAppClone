@@ -1,48 +1,49 @@
-import React from "react";
-import { Text, View, StyleSheet, SafeAreaView } from "react-native";
+import React, { useState } from "react";
+import {
+    Text,
+    View,
+    StyleSheet,
+    SafeAreaView,
+    TouchableOpacity,
+} from "react-native";
 import Input from "../components/Input";
 import PageContainer from "../components/PageContainer";
-import { FontAwesome, Feather } from "@expo/vector-icons";
-import SubmitButton from "../components/SubmitButton";
+import SignInForm from "../components/SignInForm";
+import SignUpForm from "../components/SignUpForm";
+import colors from "../constants/colors";
 
-const AuthScreen = () => (
-    <SafeAreaView style={styles.container}>
-        <PageContainer>
-            <Input
-                label="First Name"
-                iconPack={FontAwesome}
-                icon="user-o"
-                errorText="This is an error"
-            />
-            <Input
-                label="Last Name"
-                iconPack={FontAwesome}
-                icon="user-o"
-                // errorText="This is an error"
-            />
-            <Input
-                label="Email"
-                iconPack={Feather}
-                icon="mail"
-                // errorText="This is an error"
-            />    
-            <Input
-                label="Password"
-                iconPack={Feather}
-                icon="lock"
-                // errorText="This is an error" 
-            />     
-            <SubmitButton
-                title="Sign Up"
-                onPress={() => console.log("hola")}
-                style={{ marginTop: 20 }}
-            />                          
-        </PageContainer>
-    </SafeAreaView>
-);
+const AuthScreen = () => {
+    const [isSignUp, setSignUp] = useState(false);
+
+    const manageState = () => {
+        setSignUp((prev) => !prev);
+    };
+
+    return (
+        <SafeAreaView style={styles.container}>
+            <PageContainer>
+                {isSignUp ? <SignUpForm /> : <SignInForm />}
+                <TouchableOpacity style={styles.linkContainer} onPress={manageState}>
+                    <Text style={styles.link}>{`Switch to ${
+                        isSignUp ? "Sign In" : "Sign"
+                    }`}</Text>
+                </TouchableOpacity>
+            </PageContainer>
+        </SafeAreaView>
+    );
+};
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+    },
+    linkContainer: {
+        alignItems: "center",
+        marginVertical: 15,
+    },
+    link: {
+        color: colors.blue,
+        fontFamily: "medium",
+        letterSpacing: 0.3,
     },
 });
 export default AuthScreen;
