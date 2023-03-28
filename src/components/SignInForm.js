@@ -22,6 +22,8 @@ const SignInForm = () => {
         dispatchFormState({ inputId, validationResult: validateInput(inputId, inputValue) });
     }, [dispatchFormState]);
 
+    let { email, password } = formState.inputValidities;
+
     return (
         <>
             <Input
@@ -31,7 +33,7 @@ const SignInForm = () => {
                 icon="user-o"
                 autoCapitalize="none"
                 onInputChanged={inputChangedHandler}
-                // errorText="This is an error"
+                errorText={email && email["email"]}
             />
             <Input
                 id="password"
@@ -41,7 +43,7 @@ const SignInForm = () => {
                 autoCapitalize="none"
                 secureTextEntry
                 onInputChanged={inputChangedHandler}
-                // errorText="This is an error"
+                errorText={password && password["password"]}
             />
             <SubmitButton
                 title="Sign In"

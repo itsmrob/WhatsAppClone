@@ -42,6 +42,7 @@ const SignUpForm = (props) => {
         [dispatchFormState]
     );
 
+    let { firstName, lastName, email, password } = formState.inputValidities;
     return (
         <>
             <Input
@@ -51,7 +52,7 @@ const SignUpForm = (props) => {
                 icon="user-o"
                 onInputChanged={inputChangedHandler}
                 autoCapitalize="none"
-                // errorText="This is an error"
+                errorText={firstName && firstName["firstName"]}
             />
             <Input
                 id="lastName"
@@ -60,7 +61,7 @@ const SignUpForm = (props) => {
                 icon="user-o"
                 onInputChanged={inputChangedHandler}
                 autoCapitalize="none"
-                // errorText="This is an error"
+                errorText={lastName && lastName["lastName"]}
             />
             <Input
                 id="email"
@@ -70,7 +71,7 @@ const SignUpForm = (props) => {
                 onInputChanged={inputChangedHandler}
                 keyboardType="email-address"
                 autoCapitalize="none"
-                // errorText="This is an error"
+                errorText={email && email["email"]}
             />
             <Input
                 id="password"
@@ -80,7 +81,7 @@ const SignUpForm = (props) => {
                 autoCapitalize="none"
                 secureTextEntry
                 onInputChanged={inputChangedHandler}
-                // errorText="This is an error"
+                errorText={password && password["password"]}
             />
             <SubmitButton
                 title="Sign Up"
