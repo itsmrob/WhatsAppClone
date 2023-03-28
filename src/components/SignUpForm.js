@@ -8,9 +8,16 @@ import {
     validatePassword,
 } from "../utils/validationConstrains";
 import { formReducer } from "../utils/reducers/formReducer";
+import { signUp } from "../utils/actions/authActions";
 
 const SignUpForm = (props) => {
     const initialState = {
+        inputValues: {
+            firstName: "",
+            lastName: "",
+            email: "",
+            password: "",
+        },
         inputValidities: {
             firstName: false,
             lastName: false,
@@ -20,7 +27,10 @@ const SignUpForm = (props) => {
         formIsValid: false,
     };
 
-    const [formState, dispatchFormState] = useReducer(formReducer, initialState);
+    const [formState, dispatchFormState] = useReducer(
+        formReducer,
+        initialState
+    );
 
     const inputChangedHandler = useCallback(
         (inputId, inputValue) => {
@@ -35,12 +45,18 @@ const SignUpForm = (props) => {
             if (currentValidation) {
                 dispatchFormState({
                     inputId,
+                    inputValue,
                     validationResult: currentValidation(inputId, inputValue),
                 });
             }
         },
         [dispatchFormState]
     );
+
+    const authHandler = () => {
+        let values = formState.inputValues;
+        signUp(values);
+    };
 
     let { firstName, lastName, email, password } = formState.inputValidities;
     return (
@@ -85,7 +101,7 @@ const SignUpForm = (props) => {
             />
             <SubmitButton
                 title="Sign Up"
-                onPress={() => console.log("hola")}
+                onPress={authHandler}
                 style={{ marginTop: 20 }}
                 disabled={!formState.formIsValid}
             />
