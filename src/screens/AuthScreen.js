@@ -74,8 +74,8 @@ const styles = StyleSheet.create({
         width: "50%",
     },
     kyeboardAvoidingView: {
-        flex: 1, 
-        justifyContent: "center"
+        flex: 1,
+        justifyContent: "center",
     },
 });
 export default AuthScreen;

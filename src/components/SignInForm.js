@@ -20,25 +20,25 @@ const SignInForm = () => {
         formIsValid: false,
     };
 
-    const [formState, dispatchFormState] = useReducer(
+    const [formState, dispatchFormState] = useReducer( //allows us to manage complex states, its an improvement of useState 
         formReducer,
         initialState
     );
 
-    const inputChangedHandler = useCallback(
+    const inputChangedHandler = useCallback( //allows us to memoize a function just to call it
         (inputId, inputValue) => {
             dispatchFormState({
-                inputId,
-                inputValue,
-                validationResult: validateInput(inputId, inputValue),
+                inputId, //to know which input fields belongs to
+                inputValue, //the value which is coming from
+                validationResult: validateInput(inputId, inputValue), //if everything is ok, return undefined, otherwise will return an advice
             });
         },
         [dispatchFormState]
     );
 
     const handleLogin = () => {
-        let values = formState.inputValues;
-        signIn(values);
+        let inputValues = formState.inputValues;
+        signIn(inputValues);
     }
 
     let { email, password } = formState.inputValidities;

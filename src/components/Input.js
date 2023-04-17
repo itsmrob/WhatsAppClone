@@ -20,7 +20,7 @@ const Input = (props) => {
                     />
                 )}
                 <TextInput 
-                    {...props}
+                    {...props} //get all props which can be id, label, etc.
                     style={styles.input} 
                     onChangeText={onChangedText}/>
             </View>
