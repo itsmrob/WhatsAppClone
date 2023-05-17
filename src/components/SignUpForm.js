@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useReducer, useState } from "react";
+import React, {
+    useCallback,
+    useEffect,
+    useReducer,
+    useState,
+    useRef,
+} from "react";
 import Input from "../components/Input";
 import SubmitButton from "../components/SubmitButton";
 import { FontAwesome, Feather } from "@expo/vector-icons";
@@ -11,6 +17,9 @@ import { formReducer } from "../utils/reducers/formReducer";
 import { signUp } from "../utils/actions/authActions";
 import { Alert, ActivityIndicator } from "react-native";
 import colors from "../constants/colors";
+
+import { useDispatch } from "react-redux";
+// import { signUp } from "../reducers/oAuthSlice";
 
 const SignUpForm = (props) => {
     const initialState = {
@@ -34,8 +43,11 @@ const SignUpForm = (props) => {
         initialState
     );
 
-    const [error, setError] = useState();
+    const dispatch = useDispatch();
+
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+
     const inputChangedHandler = useCallback(
         (inputId, inputValue) => {
             let validationTypes = {
@@ -59,21 +71,22 @@ const SignUpForm = (props) => {
 
     useEffect(() => {
         if (error) {
-            // Alert.alert("An error ocurred", error, [{ text: "Okay"}])
-            console.log(error);
+            Alert.alert("An error occurred", error, [{ text: "Okay" }]);
         }
-    }, [error])
+    }, [error]);
 
     const authHandler = async () => {
         let inputValues = formState.inputValues;
         setLoading(true);
         try {
-            await signUp(inputValues);
+            const action = signUp(inputValues);
+            await dispatch(action);
             setError(null);
+            setLoading(false);
         } catch (error) {
-            setError(error);
+            setError(error.message);
+            setLoading(false);
         }
-        setLoading(false);
     };
 
     let { firstName, lastName, email, password } = formState.inputValidities;
@@ -117,17 +130,20 @@ const SignUpForm = (props) => {
                 onInputChanged={inputChangedHandler}
                 errorText={password && password["password"]}
             />
-            {
-                loading ?
-                <ActivityIndicator size="small" color={colors.primary} style={{ marginTop: 10 }} />
-                : <SubmitButton
-                title="Sign Up"
-                onPress={authHandler}
-                style={{ marginTop: 20 }}
-                disabled={!formState.formIsValid}
-            />
-                
-            }
+            {loading ? (
+                <ActivityIndicator
+                    size="small"
+                    color={colors.primary}
+                    style={{ marginTop: 10 }}
+                />
+            ) : (
+                <SubmitButton
+                    title="Sign Up"
+                    onPress={authHandler}
+                    style={{ marginTop: 20 }}
+                    disabled={!formState.formIsValid}
+                />
+            )}
         </>
     );
 };

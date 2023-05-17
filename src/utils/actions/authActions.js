@@ -1,51 +1,59 @@
 import { getFirebaseConfig } from "../firebaseHelper";
-import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { child, getDatabase, ref, set } from 'firebase/database';
+import {
+    createUserWithEmailAndPassword,
+    getAuth,
+    signInWithEmailAndPassword,
+} from "firebase/auth";
+import { child, getDatabase, ref, set } from "firebase/database";
 
-const app = getFirebaseConfig();
-const auth = getAuth(app);
+import { useDispatch } from "react-redux";
+import { authenticate } from "../../reducers/oAuthSlice";
 
-export const signUp = async ({ firstName, lastName, email, password }) => {
-    try {
-        const result = await createUserWithEmailAndPassword(
-            auth,
-            email,
-            password
-        );
-        
-        const { uid } = result.user;
+export const signUp = ({ firstName, lastName, email, password }) => {
+    return async (dispatch) => {
+        const app = getFirebaseConfig();
+        const auth = getAuth(app);
+        try {
+            const result = await createUserWithEmailAndPassword(auth, email, password);
 
-        const userData = await createUser({ firstName, lastName, email, uid });
+            const { uid, stsTokenManager } = result.user;
+            const { accessToken } = stsTokenManager;
 
-        console.log(userData);
-
-    } catch (error) {
-        const errorCode = error.code;
-        let message = "Something went wrong";
-        if (errorCode === "auth/email-already-in-use") {
-            message = "This email is already in use";
+            const userData = await createUser({
+                firstName,
+                lastName,
+                email,
+                uid,
+            });
+            dispatch(authenticate({ token: accessToken, userData }));
+        } catch (error) {
+            const errorCode = error.code;
+            let message = "Something went wrong";
+            if (errorCode === "auth/email-already-in-use") {
+                message = "This email is already in use";
+            }
+            throw new Error(message);
         }
-        throw new Error(message);
-    }
+    };
 };
 
 const createUser = async ({ firstName, lastName, email, uid }) => {
-    console.log(uid)
     const firstLast = `${firstName} ${lastName}`.toLowerCase();
     const userData = {
-        firstName, 
+        firstName,
         lastName,
-        firstLast, 
+        firstLast,
         email,
         uid,
-        signUpDate: new Date().toISOString()
-    }
+        signUpDate: new Date().toISOString(),
+    };
 
     const dbRef = ref(getDatabase());
-    const childRef = child(dbRef, `users/${uid}`)
+    const childRef = child(dbRef, `users/${uid}`);
     await set(childRef, userData);
+
     return userData;
-}
+};
 
 export const signIn = async ({ email, password }) => {
     try {
