@@ -9,23 +9,27 @@ import { child, getDatabase, ref, set } from "firebase/database";
 import { useDispatch } from "react-redux";
 import { authenticate } from "../../reducers/oAuthSlice";
 
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+const app = getFirebaseConfig();
+const auth = getAuth(app);
+
 export const signUp = ({ firstName, lastName, email, password }) => {
     return async (dispatch) => {
-        const app = getFirebaseConfig();
-        const auth = getAuth(app);
         try {
             const result = await createUserWithEmailAndPassword(auth, email, password);
 
             const { uid, stsTokenManager } = result.user;
-            const { accessToken } = stsTokenManager;
+            const { accessToken, expirationTime } = stsTokenManager;
 
-            const userData = await createUser({
-                firstName,
-                lastName,
-                email,
-                uid,
-            });
+            const expiryTime = new Date(expirationTime);
+
+            const userData = await createUser({ firstName, lastName, email, uid,});
+
             dispatch(authenticate({ token: accessToken, userData }));
+
+            saveDataToStorage(accessToken, uid, expiryTime);
+            
         } catch (error) {
             const errorCode = error.code;
             let message = "Something went wrong";
@@ -63,4 +67,13 @@ export const signIn = async ({ email, password }) => {
         console.error(error);
         return error;
     }
+};
+
+const saveDataToStorage = (accessToken, uid, expiryTime) => {
+        const userData = {
+            accessToken,
+            uid,
+            expiryTime: expiryTime.toISOString(),
+        };
+        AsyncStorage.setItem("@userData", JSON.stringify(userData));
 };

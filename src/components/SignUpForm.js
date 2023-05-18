@@ -82,7 +82,6 @@ const SignUpForm = (props) => {
             const action = signUp(inputValues);
             await dispatch(action);
             setError(null);
-            setLoading(false);
         } catch (error) {
             setError(error.message);
             setLoading(false);

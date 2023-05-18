@@ -1,10 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
-    // isAuthenticated: false,
-    // user: null
     token: null, 
-    userData: null
+    userData: null,
+    didTryAutoLogin: false
 
 }
 
@@ -16,10 +15,13 @@ const oAuthSlice = createSlice({
             const { payload } = action;
             state.token = payload.token;
             state.userData = payload.userData;
+        },
+        setDidTryAutoLogin: (state, action) => {
+            state.didTryAutoLogin = true;
         }
     }
 })
 
-export const { authenticate } = oAuthSlice.actions;
+export const { authenticate, setDidTryAutoLogin } = oAuthSlice.actions;
 
 export default oAuthSlice.reducer;
